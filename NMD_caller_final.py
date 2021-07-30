@@ -16,23 +16,18 @@ intron_ref_file = sys.argv[5]
 output_file = sys.argv[6]
 
 '''Part 0: import files'''
-#anno_file = '/Users/lkluegel/Documents/Splicing/Fede_Ally_Paulina/NMD/logOR_within_cell_type_ONLY_CRYPTIC_3P_Junctions_with_threshold_info.txt'
 anno_df = pd.read_csv(anno_file, index_col=0, sep=' ')
 
-##join on the info for exon skipping to find the intron number
-#exonskip_file = '/Users/lkluegel/Documents/Splicing/Fede_Ally_Paulina/NMD/logOR_within_cell_type_ALT_3P_Junctions_with_threshold_and_exon.skipping_info.txt'
+#join on the info for exon skipping to find the intron number
 exonskip_df = pd.read_csv(exonskip_file, index_col=0, sep=' ')
 
 anno_df = anno_df.join(exonskip_df[['tags_skipping', 'curTag_skipping', 'relStartExon', 'relEndExon']], how='left', on='intron_junction')
 
-#ref_file = '/Users/lkluegel/Documents/Splicing/Fede_Ally_Paulina/Annotator/Data/GRCh38.p12.genome.fa'
 records = list(SeqIO.parse(ref_file, 'fasta'))
 
-#geneRef_file = '/Users/lkluegel/Documents/Splicing/Fede_Ally_Paulina/Annotator/Data/gencode.v31.basic.annotation.csv'
 geneRef_df = pd.read_csv(geneRef_file, index_col=False)
 geneRef_df = geneRef_df[geneRef_df['type'] == 'transcript']
 
-#intron_ref_file = '/Users/lkluegel/Documents/Splicing/Fede_Ally_Paulina/Annotator/Data/leafviz_all_introns_cleaned.bed'
 intron_df = pd.read_csv(intron_ref_file, sep='\t', header=None)
 
 
